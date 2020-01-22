@@ -2,7 +2,6 @@ package com.mulitlevelrecyclerview.example;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,20 +11,21 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.mulitlevelrecyclerview.R;
 import com.multilevelview.MultiLevelAdapter;
 import com.multilevelview.MultiLevelRecyclerView;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 
-public class MyAdapter extends MultiLevelAdapter {
+public class MyAdapter extends MultiLevelAdapter<Item> {
 
     private Holder mViewHolder;
     private Context mContext;
-    private List<Item> mListItems = new ArrayList<>();
+    private List<Item> mListItems;
     private Item mItem;
     private MultiLevelRecyclerView mMultiLevelRecyclerView;
 
@@ -47,7 +47,13 @@ public class MyAdapter extends MultiLevelAdapter {
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void updateItemList(List<Item> list) {
+        super.updateItemList(list);
+        this.mListItems = list;
+    }
+
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         mViewHolder = (Holder) holder;
         mItem = mListItems.get(position);
 
@@ -72,13 +78,43 @@ public class MyAdapter extends MultiLevelAdapter {
             mViewHolder.mExpandButton.setVisibility(View.GONE);
         }
 
-        Log.e("MuditLog",mItem.getLevel()+" "+mItem.getPosition()+" "+mItem.isExpanded()+"");
+        Log.e("MuditLog", mItem.getLevel() + " " + mItem.getPosition() + " " + mItem.isExpanded() + "");
 
         // indent child items
         // Note: the parent item should start at zero to have no indentation
         // e.g. in populateFakeData(); the very first Item shold be instantiate like this: Item item = new Item(0);
         float density = mContext.getResources().getDisplayMetrics().density;
         ((ViewGroup.MarginLayoutParams) mViewHolder.mTextBox.getLayoutParams()).leftMargin = (int) ((getItemViewType(position) * 20) * density + 0.5f);
+        // The following code snippets are only necessary if you set multiLevelRecyclerView.removeItemClickListeners(); in MainActivity.java
+        // this enables more than one click event on an item (e.g. Click Event on the item itself and click event on the expand button)
+        mViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //set click event on item here
+                Toast.makeText(mContext, String.format(Locale.ENGLISH, "Item at position %d was clicked!",
+                        mViewHolder.getAdapterPosition()), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        //set click listener on LinearLayout because the click area is bigger than the ImageView
+        mViewHolder.mExpandButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // set click event on expand button here
+                mMultiLevelRecyclerView.toggleItemsGroup(position);
+                // rotate the icon based on the current state
+                // but only here because otherwise we'd see the animation on expanded items too while scrolling
+                mViewHolder.mExpandIcon.animate().rotation(mItem.isExpanded() ? -180 : 0).start();
+
+                Toast.makeText(mContext, String.format(Locale.ENGLISH, "Item at position %d is expanded: %s",
+                        position, mItem.isExpanded()), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    @Override
+    public int getItemCount() {
+        return mListItems != null ? mListItems.size() : 0;
     }
 
     private class Holder extends RecyclerView.ViewHolder {
@@ -89,35 +125,11 @@ public class MyAdapter extends MultiLevelAdapter {
 
         Holder(View itemView) {
             super(itemView);
-            mTitle = (TextView) itemView.findViewById(R.id.title);
-            mSubtitle = (TextView) itemView.findViewById(R.id.subtitle);
-            mExpandIcon = (ImageView) itemView.findViewById(R.id.image_view);
-            mTextBox = (LinearLayout) itemView.findViewById(R.id.text_box);
-            mExpandButton = (LinearLayout) itemView.findViewById(R.id.expand_field);
-
-            // The following code snippets are only necessary if you set multiLevelRecyclerView.removeItemClickListeners(); in MainActivity.java
-            // this enables more than one click event on an item (e.g. Click Event on the item itself and click event on the expand button)
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //set click event on item here
-                    Toast.makeText(mContext, String.format(Locale.ENGLISH, "Item at position %d was clicked!", getAdapterPosition()), Toast.LENGTH_SHORT).show();
-                }
-            });
-
-            //set click listener on LinearLayout because the click area is bigger than the ImageView
-            mExpandButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // set click event on expand button here
-                    mMultiLevelRecyclerView.toggleItemsGroup(getAdapterPosition());
-                    // rotate the icon based on the current state
-                    // but only here because otherwise we'd see the animation on expanded items too while scrolling
-                    mExpandIcon.animate().rotation(mListItems.get(getAdapterPosition()).isExpanded() ? -180 : 0).start();
-
-                    Toast.makeText(mContext, String.format(Locale.ENGLISH, "Item at position %d is expanded: %s", getAdapterPosition(), mItem.isExpanded()), Toast.LENGTH_SHORT).show();
-                }
-            });
+            mTitle = itemView.findViewById(R.id.title);
+            mSubtitle = itemView.findViewById(R.id.subtitle);
+            mExpandIcon = itemView.findViewById(R.id.image_view);
+            mTextBox = itemView.findViewById(R.id.text_box);
+            mExpandButton = itemView.findViewById(R.id.expand_field);
         }
     }
 

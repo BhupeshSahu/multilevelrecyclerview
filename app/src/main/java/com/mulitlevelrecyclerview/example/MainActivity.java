@@ -1,14 +1,13 @@
 package com.mulitlevelrecyclerview.example;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.mulitlevelrecyclerview.R;
 import com.multilevelview.MultiLevelRecyclerView;
@@ -28,30 +27,39 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        final MultiLevelRecyclerView multiLevelRecyclerView = (MultiLevelRecyclerView) findViewById(R.id.rv_list);
+        final MultiLevelRecyclerView multiLevelRecyclerView = findViewById(R.id.rv_list);
         multiLevelRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        List<Item> itemList = (List<Item>) recursivePopulateFakeData(0, 12);
-
+//        List<Item> itemList = recursivePopulateFakeData(0, 12);
+        List<Item> itemList = new ArrayList<>();
         MyAdapter myAdapter = new MyAdapter(this, itemList, multiLevelRecyclerView);
 
         multiLevelRecyclerView.setAdapter(myAdapter);
 
         //If you are handling the click on your own then you can
-       // multiLevelRecyclerView.removeItemClickListeners();
+        // multiLevelRecyclerView.removeItemClickListeners();
         multiLevelRecyclerView.setToggleItemOnClick(false);
 
         multiLevelRecyclerView.setAccordion(false);
 
-        multiLevelRecyclerView.openTill(0,1,2,3);
+        multiLevelRecyclerView.openTill(0, 1, 2, 3);
+
+        myAdapter.updateItemList(recursivePopulateFakeData(0, 12));
+        myAdapter.notifyDataSetChanged();
+        multiLevelRecyclerView.setOnItemClick(new OnRecyclerItemClickListener() {
+            @Override
+            public void onItemClick(View view, RecyclerViewItem item, int position) {
+
+            }
+        });
     }
 
 
-    private List<?> recursivePopulateFakeData(int levelNumber, int depth) {
-        List<RecyclerViewItem> itemList = new ArrayList<>();
+    private List<Item> recursivePopulateFakeData(int levelNumber, int depth) {
+        List<Item> itemList = new ArrayList<>();
 
         String title;
-        switch (levelNumber){
+        switch (levelNumber) {
             case 1:
                 title = "PQRST %d";
                 break;
@@ -67,8 +75,8 @@ public class MainActivity extends AppCompatActivity {
             Item item = new Item(levelNumber);
             item.setText(String.format(Locale.ENGLISH, title, i));
             item.setSecondText(String.format(Locale.ENGLISH, title.toLowerCase(), i));
-            if(depth % 2 == 0){
-                item.addChildren((List<RecyclerViewItem>) recursivePopulateFakeData(levelNumber + 1, depth/2));
+            if (depth % 2 == 0) {
+                item.addChildren(recursivePopulateFakeData(levelNumber + 1, depth / 2));
             }
             itemList.add(item);
         }

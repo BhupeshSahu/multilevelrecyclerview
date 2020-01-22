@@ -5,13 +5,13 @@ import java.util.List;
 
 public abstract class RecyclerViewItem {
 
-    private List<RecyclerViewItem> children;
+    private List<? extends RecyclerViewItem> children;
 
     private int level;
 
     private int position;
 
-    private boolean expanded=false;
+    private boolean expanded = false;
 
     public boolean isExpanded() {
         return expanded;
@@ -21,7 +21,7 @@ public abstract class RecyclerViewItem {
         this.expanded = expanded;
     }
 
-    protected RecyclerViewItem(int level){
+    protected RecyclerViewItem(int level) {
         this.level = level;
     }
 
@@ -37,22 +37,22 @@ public abstract class RecyclerViewItem {
         this.level = level;
     }
 
-    public int getLevel(){
+    public int getLevel() {
         return level;
     }
 
-    public List<RecyclerViewItem> getChildren() {
+    public List<? extends RecyclerViewItem> getChildren() {
         return children;
     }
 
-    public void addChildren(List<RecyclerViewItem> children) {
+    public void addChildren(List<? extends RecyclerViewItem> children) {
         this.children = children;
     }
 
-    public boolean hasChildren(){
-        if(children !=null && children.size() > 0){
+    public boolean hasChildren() {
+        if (children != null && children.size() > 0) {
             return true;
-        }else{
+        } else {
             return false;
         }
 
