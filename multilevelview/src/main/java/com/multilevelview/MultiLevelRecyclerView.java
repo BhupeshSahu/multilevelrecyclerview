@@ -7,6 +7,7 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.multilevelview.animators.DefaultItemAnimator;
@@ -189,12 +190,7 @@ public class MultiLevelRecyclerView extends RecyclerView implements OnRecyclerIt
                 prevClickedPosition = -1;
                 numberOfItemsAdded = 0;
             } else {
-                if (clickedItem.isExpanded()) {
-                    removePrevItems(adapterList, prevClickedPosition, numberOfItemsAdded);
-                    addItems(clickedItem, adapterList, clickedItem.getPosition());
-                } else {
-                    addItems(clickedItem, adapterList, position);
-                }
+                addItems(clickedItem, adapterList, position);
             }
         }
     }
@@ -312,9 +308,9 @@ public class MultiLevelRecyclerView extends RecyclerView implements OnRecyclerIt
             return false;
         }
 
-
         @Override
-        public void onTouchEvent(RecyclerView view, MotionEvent motionEvent) {
+        public void onTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
+
         }
 
         @Override

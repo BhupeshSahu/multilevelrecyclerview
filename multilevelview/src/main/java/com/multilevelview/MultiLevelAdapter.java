@@ -1,8 +1,6 @@
 package com.multilevelview;
 
 
-import android.view.ViewGroup;
-
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.multilevelview.models.RecyclerViewItem;
@@ -26,12 +24,6 @@ public abstract class MultiLevelAdapter<T extends RecyclerViewItem> extends
     public void updateItemList(List<T> itemList) {
         this.recyclerViewItemList = itemList;
     }
-
-    @Override
-    public abstract RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType);
-
-    @Override
-    public abstract void onBindViewHolder(RecyclerView.ViewHolder holder, int position);
 
     @Override
     public int getItemViewType(int position) {
