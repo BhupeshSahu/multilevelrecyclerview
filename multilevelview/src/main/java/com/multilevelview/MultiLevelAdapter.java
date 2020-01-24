@@ -23,6 +23,7 @@ public abstract class MultiLevelAdapter<T extends RecyclerViewItem> extends
 
     public void updateItemList(List<T> itemList) {
         this.recyclerViewItemList = itemList;
+        notifyDataSetChanged();
     }
 
     @Override

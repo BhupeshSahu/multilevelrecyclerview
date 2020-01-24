@@ -45,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
         multiLevelRecyclerView.openTill(0, 1, 2, 3);
 
         myAdapter.updateItemList(recursivePopulateFakeData(0, 12));
-        myAdapter.notifyDataSetChanged();
         multiLevelRecyclerView.setOnItemClick(new OnRecyclerItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerViewItem item, int position) {

@@ -83,12 +83,7 @@ public class MultiLevelRecyclerView extends RecyclerView implements OnRecyclerIt
         super.setItemAnimator(animator);
     }
 
-    @Override
-    public void setAdapter(Adapter adapter) {
-        throw new IllegalStateException("Please Set Adapter Of the MultiLevelAdapter Class.");
-    }
-
-    public void setAdapter(MultiLevelAdapter<RecyclerViewItem> adapter) {
+    public void setAdapter(MultiLevelAdapter adapter) {
         super.setAdapter(adapter);
         mMultiLevelAdapter = adapter;
     }
