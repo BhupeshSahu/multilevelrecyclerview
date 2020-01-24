@@ -88,12 +88,12 @@ public class MultiLevelRecyclerView extends RecyclerView implements OnRecyclerIt
         throw new IllegalStateException("Please Set Adapter Of the MultiLevelAdapter Class.");
     }
 
-    public void setAdapter(MultiLevelAdapter<? extends RecyclerViewItem> adapter) {
+    public void setAdapter(MultiLevelAdapter<RecyclerViewItem> adapter) {
         super.setAdapter(adapter);
-        mMultiLevelAdapter = (MultiLevelAdapter<RecyclerViewItem>) adapter;
+        mMultiLevelAdapter = adapter;
     }
 
-    public void removeAllChildren(List<? extends RecyclerViewItem> list) {
+    public void removeAllChildren(List<RecyclerViewItem> list) {
         for (RecyclerViewItem i : list) {
             if (i.isExpanded()) {
                 i.setExpanded(false);

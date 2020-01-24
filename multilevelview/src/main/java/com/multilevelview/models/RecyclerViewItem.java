@@ -3,9 +3,9 @@ package com.multilevelview.models;
 
 import java.util.List;
 
-public abstract class RecyclerViewItem {
+public abstract class RecyclerViewItem<T> {
 
-    private List<? extends RecyclerViewItem> children;
+    private List<RecyclerViewItem<T>> children;
 
     private int level;
 
@@ -41,11 +41,11 @@ public abstract class RecyclerViewItem {
         return level;
     }
 
-    public List<? extends RecyclerViewItem> getChildren() {
+    public List<RecyclerViewItem<T>> getChildren() {
         return children;
     }
 
-    public void addChildren(List<? extends RecyclerViewItem> children) {
+    public void addChildren(List<RecyclerViewItem<T>> children) {
         this.children = children;
     }
 
