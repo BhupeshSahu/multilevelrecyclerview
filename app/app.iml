@@ -164,5 +164,6 @@
     <orderEntry type="library" name="Gradle: androidx.recyclerview:recyclerview:1.1.0@aar" level="project" />
     <orderEntry type="library" name="Gradle: androidx.collection:collection:1.0.0@jar" level="project" />
     <orderEntry type="module" module-name="multilevelview" />
+    <orderEntry type="module" module-name="multilevelview" />
   </component>
 </module>

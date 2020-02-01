@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mulitlevelrecyclerview.R;
@@ -21,11 +22,11 @@ import java.util.List;
 import java.util.Locale;
 
 
-public class MyAdapter extends MultiLevelAdapter<Item> {
+public class MyAdapter extends MultiLevelAdapter {
 
     private Holder mViewHolder;
     private Context mContext;
-    private List<Item> mListItems;
+    private List mListItems;
     private Item mItem;
     private MultiLevelRecyclerView mMultiLevelRecyclerView;
 
@@ -42,20 +43,21 @@ public class MyAdapter extends MultiLevelAdapter<Item> {
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    @NonNull
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new Holder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_layout, parent, false));
     }
 
     @Override
-    public void updateItemList(List<Item> list) {
+    public void updateItemList(List list) {
         super.updateItemList(list);
         this.mListItems = list;
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
         mViewHolder = (Holder) holder;
-        mItem = mListItems.get(position);
+        mItem = (Item) mListItems.get(position);
 
         switch (getItemViewType(position)) {
             case 1:
