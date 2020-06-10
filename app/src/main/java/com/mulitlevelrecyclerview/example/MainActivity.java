@@ -5,18 +5,19 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
 import com.mulitlevelrecyclerview.R;
 import com.multilevelview.MultiLevelRecyclerView;
 import com.multilevelview.OnRecyclerItemClickListener;
+import com.multilevelview.StickyHeaderItemDecorator;
 import com.multilevelview.models.RecyclerViewItem;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -44,8 +45,10 @@ public class MainActivity extends AppCompatActivity {
 
         multiLevelRecyclerView.openTill(0, 1, 2, 3);
 
-//        myAdapter.updateItemList(recursivePopulateFakeData(0, 12));
-        myAdapter.updateItemList(null);
+        StickyHeaderItemDecorator decorator = new StickyHeaderItemDecorator(myAdapter);
+        decorator.attachToRecyclerView(multiLevelRecyclerView);
+
+        myAdapter.updateList(recursivePopulateFakeData(0, 12));
         multiLevelRecyclerView.setOnItemClick(new OnRecyclerItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerViewItem item, int position) {

@@ -13,6 +13,10 @@ public abstract class RecyclerViewItem {
 
     private boolean expanded = false;
 
+    private String sectionName;
+
+    private boolean isSection = false;
+
     public boolean isExpanded() {
         return expanded;
     }
@@ -56,5 +60,21 @@ public abstract class RecyclerViewItem {
             return false;
         }
 
+    }
+
+    public void setSectionName(String sectionName) {
+        this.sectionName = sectionName;
+    }
+
+    public String getSectionName() {
+        return sectionName;
+    }
+
+    public boolean getIsSection() {
+        return isSection;
+    }
+
+    public void setIsSection(boolean isSection) {
+        this.isSection = isSection;
     }
 }

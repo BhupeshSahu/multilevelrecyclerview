@@ -11,15 +11,17 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.mulitlevelrecyclerview.R;
 import com.multilevelview.MultiLevelAdapter;
 import com.multilevelview.MultiLevelRecyclerView;
+import com.multilevelview.models.HeaderItem;
+import com.multilevelview.models.RecyclerViewItem;
 
 import java.util.List;
 import java.util.Locale;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 
 public class MyAdapter extends MultiLevelAdapter {
@@ -45,19 +47,40 @@ public class MyAdapter extends MultiLevelAdapter {
     @Override
     @NonNull
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new Holder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_layout, parent, false));
+        if (viewType == HEADER)
+            return new HeaderViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.header_layout,
+                    parent, false));
+        return new Holder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_layout,
+                parent, false));
     }
 
     @Override
-    public void updateItemList(List list) {
-        super.updateItemList(list);
+    public void updateList(List list) {
+        super.updateList(list);
         this.mListItems = list;
     }
 
     @Override
+    public void onBindHeaderViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
+        ((HeaderViewHolder) viewHolder).mTitle.setText(getItemAt(i).getSectionName());
+    }
+
+    @Override
+    public RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent) {
+        return new HeaderViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.header_layout, parent, false));
+    }
+
+
+    @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
+        RecyclerViewItem rawItem = getItemAt(position);
+        if (rawItem instanceof HeaderItem) {
+            HeaderViewHolder viewHolder = (HeaderViewHolder) holder;
+            viewHolder.mTitle.setText(rawItem.getSectionName());
+            return;
+        }
         mViewHolder = (Holder) holder;
-        mItem = (Item) mListItems.get(position);
+        mItem = (Item) rawItem;
 
         switch (getItemViewType(position)) {
             case 1:
@@ -114,10 +137,6 @@ public class MyAdapter extends MultiLevelAdapter {
         });
     }
 
-    @Override
-    public int getItemCount() {
-        return mListItems != null ? mListItems.size() : 0;
-    }
 
     private class Holder extends RecyclerView.ViewHolder {
 
@@ -132,6 +151,16 @@ public class MyAdapter extends MultiLevelAdapter {
             mExpandIcon = itemView.findViewById(R.id.image_view);
             mTextBox = itemView.findViewById(R.id.text_box);
             mExpandButton = itemView.findViewById(R.id.expand_field);
+        }
+    }
+
+    private class HeaderViewHolder extends RecyclerView.ViewHolder {
+
+        TextView mTitle;
+
+        HeaderViewHolder(View itemView) {
+            super(itemView);
+            mTitle = itemView.findViewById(R.id.title);
         }
     }
 
