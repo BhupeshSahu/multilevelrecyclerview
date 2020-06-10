@@ -15,7 +15,15 @@ public abstract class RecyclerViewItem {
 
     private String sectionName;
 
-    private boolean isSection = false;
+    /**
+     * Convenient constructor for header item
+     *
+     * @param sectionName header name
+     */
+    public RecyclerViewItem(String sectionName) {
+        this(1);
+        this.sectionName = sectionName;
+    }
 
     public boolean isExpanded() {
         return expanded;
@@ -59,7 +67,6 @@ public abstract class RecyclerViewItem {
         } else {
             return false;
         }
-
     }
 
     public void setSectionName(String sectionName) {
@@ -70,11 +77,4 @@ public abstract class RecyclerViewItem {
         return sectionName;
     }
 
-    public boolean getIsSection() {
-        return isSection;
-    }
-
-    public void setIsSection(boolean isSection) {
-        this.isSection = isSection;
-    }
 }

@@ -2,7 +2,6 @@ package com.mulitlevelrecyclerview.example;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,18 +10,21 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.mulitlevelrecyclerview.R;
-import com.multilevelview.MultiLevelAdapter;
 import com.multilevelview.MultiLevelRecyclerView;
+import com.multilevelview.MultiLevelStickyHeaderAdapter;
+import com.multilevelview.models.HeaderItem;
+import com.multilevelview.models.RecyclerViewItem;
+import com.multilevelview.models.ViewType;
 
 import java.util.List;
 import java.util.Locale;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
-public class MyAdapter extends MultiLevelAdapter {
+
+public class MyAdapterWithStickyHeader extends MultiLevelStickyHeaderAdapter {
 
     private Holder mViewHolder;
     private Context mContext;
@@ -30,7 +32,7 @@ public class MyAdapter extends MultiLevelAdapter {
     private Item mItem;
     private MultiLevelRecyclerView mMultiLevelRecyclerView;
 
-    MyAdapter(Context mContext, List mListItems, MultiLevelRecyclerView mMultiLevelRecyclerView) {
+    MyAdapterWithStickyHeader(Context mContext, List mListItems, MultiLevelRecyclerView mMultiLevelRecyclerView) {
         super(mListItems);
         this.mListItems = mListItems;
         this.mContext = mContext;
@@ -45,19 +47,42 @@ public class MyAdapter extends MultiLevelAdapter {
     @Override
     @NonNull
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new Holder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_layout, parent, false));
+        if (viewType == ViewType.HEADER)
+            return new HeaderViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.header_layout,
+                    parent, false));
+        return new Holder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_layout,
+                parent, false));
     }
 
     @Override
-    public void updateItemList(List list) {
-        super.updateItemList(list);
+    public void updateList(List list) {
+        super.updateList(list);
         this.mListItems = list;
     }
 
     @Override
+    public void onBindHeaderViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
+        ((HeaderViewHolder) viewHolder).mTitle.setText(getItemAt(i).getSectionName());
+    }
+
+    @Override
+    public RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent) {
+        return onCreateViewHolder(parent, ViewType.HEADER);
+    }
+
+
+    @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
+        RecyclerViewItem rawItem = getItemAt(position);
+
+        // Implement
+        if (rawItem instanceof HeaderItem) {
+            onBindHeaderViewHolder(holder, position);
+            return;
+        }
+
         mViewHolder = (Holder) holder;
-        mItem = (Item) mListItems.get(position);
+        mItem = (Item) rawItem;
 
         switch (getItemViewType(position)) {
             case 1:
@@ -112,10 +137,6 @@ public class MyAdapter extends MultiLevelAdapter {
         });
     }
 
-    @Override
-    public int getItemCount() {
-        return mListItems != null ? mListItems.size() : 0;
-    }
 
     private class Holder extends RecyclerView.ViewHolder {
 
@@ -130,6 +151,16 @@ public class MyAdapter extends MultiLevelAdapter {
             mExpandIcon = itemView.findViewById(R.id.image_view);
             mTextBox = itemView.findViewById(R.id.text_box);
             mExpandButton = itemView.findViewById(R.id.expand_field);
+        }
+    }
+
+    private class HeaderViewHolder extends RecyclerView.ViewHolder {
+
+        TextView mTitle;
+
+        HeaderViewHolder(View itemView) {
+            super(itemView);
+            mTitle = itemView.findViewById(R.id.title);
         }
     }
 

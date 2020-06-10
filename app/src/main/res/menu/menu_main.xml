@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.mulitlevelrecyclerview.example.MainActivity">
     <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
+        android:id="@+id/action_list_type"
         android:title="@string/action_settings"
-        app:showAsAction="never" />
+        app:actionLayout="@layout/action_switch_layout"
+        app:showAsAction="ifRoom" />
 </menu>

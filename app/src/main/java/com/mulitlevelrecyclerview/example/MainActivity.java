@@ -4,11 +4,12 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 
 import com.mulitlevelrecyclerview.R;
 import com.multilevelview.MultiLevelRecyclerView;
 import com.multilevelview.OnRecyclerItemClickListener;
-import com.multilevelview.StickyHeaderItemDecorator;
 import com.multilevelview.models.RecyclerViewItem;
 
 import java.util.ArrayList;
@@ -21,6 +22,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 public class MainActivity extends AppCompatActivity {
 
+    private MultiLevelRecyclerView multiLevelRecyclerView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,12 +31,22 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        final MultiLevelRecyclerView multiLevelRecyclerView = findViewById(R.id.rv_list);
+        multiLevelRecyclerView = findViewById(R.id.rv_list);
         multiLevelRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-//        List<Item> itemList = recursivePopulateFakeData(0, 12);
-        List<Item> itemList = new ArrayList<>();
-        MyAdapter myAdapter = new MyAdapter(this, itemList, multiLevelRecyclerView);
+        setSimpleAdapter();
+
+        multiLevelRecyclerView.setOnItemClick(new OnRecyclerItemClickListener() {
+            @Override
+            public void onItemClick(View view, RecyclerViewItem item, int position) {
+
+            }
+        });
+    }
+
+    private void setSimpleAdapter() {
+
+        MyAdapter myAdapter = new MyAdapter(this, new ArrayList(), multiLevelRecyclerView);
 
         multiLevelRecyclerView.setAdapter(myAdapter);
 
@@ -45,16 +58,32 @@ public class MainActivity extends AppCompatActivity {
 
         multiLevelRecyclerView.openTill(0, 1, 2, 3);
 
-        StickyHeaderItemDecorator decorator = new StickyHeaderItemDecorator(myAdapter);
-        decorator.attachToRecyclerView(multiLevelRecyclerView);
+        // use this to update date at later stage
+        myAdapter.updateItemList(recursivePopulateFakeData(0, 12));
 
+//        StickyHeaderItemDecorator decorator = new StickyHeaderItemDecorator(myAdapter);
+//        decorator.attachToRecyclerView(multiLevelRecyclerView);
+    }
+
+    private void setAdapterWithStickyHeader() {
+
+        MyAdapterWithStickyHeader myAdapter = new MyAdapterWithStickyHeader(this, new ArrayList(), multiLevelRecyclerView);
+
+        multiLevelRecyclerView.setAdapter(myAdapter);
+
+        //If you are handling the click on your own then you can
+        // multiLevelRecyclerView.removeItemClickListeners();
+        multiLevelRecyclerView.setToggleItemOnClick(false);
+
+        multiLevelRecyclerView.setAccordion(false);
+
+        multiLevelRecyclerView.openTill(0, 1, 2, 3);
+
+        // use this to update date at later stage
         myAdapter.updateList(recursivePopulateFakeData(0, 12));
-        multiLevelRecyclerView.setOnItemClick(new OnRecyclerItemClickListener() {
-            @Override
-            public void onItemClick(View view, RecyclerViewItem item, int position) {
 
-            }
-        });
+//        StickyHeaderItemDecorator decorator = new StickyHeaderItemDecorator(myAdapter);
+//        decorator.attachToRecyclerView(multiLevelRecyclerView);
     }
 
 
@@ -91,7 +120,22 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+        /** Get the action view of the menu item whose id is search */
+        View v = menu.findItem(R.id.action_list_type).getActionView();
+
+        /** Get the edit text from the action view */
+        Switch switchListType = v.findViewById(R.id.switch_list_type);
+        switchListType.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked)
+                    setAdapterWithStickyHeader();
+                else
+                    setSimpleAdapter();
+            }
+        });
+
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -102,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_list_type) {
             return true;
         }
 
