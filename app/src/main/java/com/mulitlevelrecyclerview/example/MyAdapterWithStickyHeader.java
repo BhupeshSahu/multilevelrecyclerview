@@ -28,13 +28,11 @@ public class MyAdapterWithStickyHeader extends MultiLevelStickyHeaderAdapter {
 
     private Holder mViewHolder;
     private Context mContext;
-    private List mListItems;
     private Item mItem;
     private MultiLevelRecyclerView mMultiLevelRecyclerView;
 
     MyAdapterWithStickyHeader(Context mContext, List mListItems, MultiLevelRecyclerView mMultiLevelRecyclerView) {
         super(mListItems);
-        this.mListItems = mListItems;
         this.mContext = mContext;
         this.mMultiLevelRecyclerView = mMultiLevelRecyclerView;
     }
@@ -57,12 +55,11 @@ public class MyAdapterWithStickyHeader extends MultiLevelStickyHeaderAdapter {
     @Override
     public void updateList(List list) {
         super.updateList(list);
-        this.mListItems = list;
     }
 
     @Override
-    public void onBindHeaderViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
-        ((HeaderViewHolder) viewHolder).mTitle.setText(getItemAt(i).getSectionName());
+    public void onBindHeaderViewHolder(RecyclerView.ViewHolder viewHolder, int headerPosition) {
+        ((HeaderViewHolder) viewHolder).mTitle.setText(getItemAt(headerPosition).getSectionName());
     }
 
     @Override
@@ -138,7 +135,7 @@ public class MyAdapterWithStickyHeader extends MultiLevelStickyHeaderAdapter {
     }
 
 
-    private class Holder extends RecyclerView.ViewHolder {
+    private static class Holder extends RecyclerView.ViewHolder {
 
         TextView mTitle, mSubtitle;
         ImageView mExpandIcon;
@@ -154,7 +151,7 @@ public class MyAdapterWithStickyHeader extends MultiLevelStickyHeaderAdapter {
         }
     }
 
-    private class HeaderViewHolder extends RecyclerView.ViewHolder {
+    private static class HeaderViewHolder extends RecyclerView.ViewHolder {
 
         TextView mTitle;
 

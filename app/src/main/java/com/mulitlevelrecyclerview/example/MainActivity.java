@@ -9,7 +9,7 @@ import android.widget.Switch;
 
 import com.mulitlevelrecyclerview.R;
 import com.multilevelview.MultiLevelRecyclerView;
-import com.multilevelview.OnRecyclerItemClickListener;
+import com.multilevelview.StickyHeaderItemDecorator;
 import com.multilevelview.models.RecyclerViewItem;
 
 import java.util.ArrayList;
@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 public class MainActivity extends AppCompatActivity {
 
     private MultiLevelRecyclerView multiLevelRecyclerView;
+    private StickyHeaderItemDecorator decorator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,33 +37,29 @@ public class MainActivity extends AppCompatActivity {
 
         setSimpleAdapter();
 
-        multiLevelRecyclerView.setOnItemClick(new OnRecyclerItemClickListener() {
-            @Override
-            public void onItemClick(View view, RecyclerViewItem item, int position) {
-
-            }
-        });
     }
 
     private void setSimpleAdapter() {
 
         MyAdapter myAdapter = new MyAdapter(this, new ArrayList(), multiLevelRecyclerView);
 
+        // Just to clean-up previous sticky header residues
+        // Not required in most of the scenarios
+        if (decorator != null) {
+            multiLevelRecyclerView.removeItemDecoration(decorator);
+            decorator = null;
+        }
         multiLevelRecyclerView.setAdapter(myAdapter);
 
         //If you are handling the click on your own then you can
-        // multiLevelRecyclerView.removeItemClickListeners();
-        multiLevelRecyclerView.setToggleItemOnClick(false);
+        multiLevelRecyclerView.setToggleItemOnClick(true);
 
         multiLevelRecyclerView.setAccordion(false);
 
-        multiLevelRecyclerView.openTill(0, 1, 2, 3);
-
         // use this to update date at later stage
-        myAdapter.updateItemList(recursivePopulateFakeData(0, 12));
+        myAdapter.updateList(recursivePopulateFakeData(0, 12));
 
-//        StickyHeaderItemDecorator decorator = new StickyHeaderItemDecorator(myAdapter);
-//        decorator.attachToRecyclerView(multiLevelRecyclerView);
+
     }
 
     private void setAdapterWithStickyHeader() {
@@ -73,17 +70,15 @@ public class MainActivity extends AppCompatActivity {
 
         //If you are handling the click on your own then you can
         // multiLevelRecyclerView.removeItemClickListeners();
-        multiLevelRecyclerView.setToggleItemOnClick(false);
+        multiLevelRecyclerView.setToggleItemOnClick(true);
 
         multiLevelRecyclerView.setAccordion(false);
-
-        multiLevelRecyclerView.openTill(0, 1, 2, 3);
 
         // use this to update date at later stage
         myAdapter.updateList(recursivePopulateFakeData(0, 12));
 
-//        StickyHeaderItemDecorator decorator = new StickyHeaderItemDecorator(myAdapter);
-//        decorator.attachToRecyclerView(multiLevelRecyclerView);
+        decorator = new StickyHeaderItemDecorator(myAdapter);
+        decorator.attachToRecyclerView(multiLevelRecyclerView);
     }
 
 

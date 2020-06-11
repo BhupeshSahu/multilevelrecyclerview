@@ -49,8 +49,8 @@ public class MyAdapter extends MultiLevelAdapter {
     }
 
     @Override
-    public void updateItemList(List list) {
-        super.updateItemList(list);
+    public void updateList(List list) {
+        super.updateList(list);
         this.mListItems = list;
     }
 

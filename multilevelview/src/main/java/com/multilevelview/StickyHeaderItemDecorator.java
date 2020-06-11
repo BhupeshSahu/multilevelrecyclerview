@@ -12,13 +12,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class StickyHeaderItemDecorator extends RecyclerView.ItemDecoration {
 
-    private StickyAdapter adapter;
+    private MultiLevelStickyHeaderAdapter adapter;
     private int currentStickyPosition = RecyclerView.NO_POSITION;
     private RecyclerView recyclerView;
     private RecyclerView.ViewHolder currentStickyHolder;
     private View lastViewOverlappedByHeader = null;
 
-    public StickyHeaderItemDecorator(@NonNull StickyAdapter adapter) {
+    public StickyHeaderItemDecorator(@NonNull MultiLevelStickyHeaderAdapter adapter) {
         this.adapter = adapter;
     }
 

@@ -1,17 +1,17 @@
 package com.multilevelview;
 
 
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.multilevelview.models.RecyclerViewItem;
 
 import java.util.List;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 
 public abstract class MultiLevelAdapter extends
         RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private List recyclerViewItemList;
+    protected List recyclerViewItemList;
 
     public MultiLevelAdapter(List recyclerViewItems) {
         this.recyclerViewItemList = recyclerViewItems;
@@ -24,7 +24,11 @@ public abstract class MultiLevelAdapter extends
         return recyclerViewItemList;
     }
 
-    public void updateItemList(List itemList) {
+    public void updateList(List itemList) {
+        updateItemList(itemList);
+    }
+
+    void updateItemList(List itemList) {
         if (itemList != null && !itemList.isEmpty() && !(itemList.get(0) instanceof RecyclerViewItem)) {
             throw new IllegalStateException("List item must extend RecyclerViewItem");
         }
