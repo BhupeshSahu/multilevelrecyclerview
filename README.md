@@ -90,8 +90,12 @@ decorator.attachToRecyclerView(multiLevelRecyclerView);
 
 Please clone or download the repository in order to see the sample code to better understand the usage!
 
+# Author
+
+Originally written by [Mudit Sen](https://github.com/muditsen)
+
 # License
-Copyright (C) 2015 Mudti Sen <muditsen1234@gmail.com>
+Copyright (C) 2015 Mudit Sen <muditsen1234@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
