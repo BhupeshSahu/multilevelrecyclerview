@@ -48,6 +48,8 @@ public abstract class MultiLevelStickyHeaderAdapter extends
     }
 
     private void createSections(boolean fromRecyclerView) {
+        if (super.recyclerViewItemList == null || super.recyclerViewItemList.isEmpty())
+            return;
         int itemCount = 0;
         int headerIndex;
         String sectionName;
@@ -64,18 +66,17 @@ public abstract class MultiLevelStickyHeaderAdapter extends
             }
             return;
         }
-        if (super.recyclerViewItemList == null || super.recyclerViewItemList.isEmpty())
-            return;
-        final int childUnderSection = 3;
-
-        for (Object item : super.recyclerViewItemList) {
-            RecyclerViewItem recyclerViewItem = (RecyclerViewItem) item;
-            headerIndex = ((itemCount / childUnderSection) + 1);
-            sectionName = "Header " + headerIndex;
-            recyclerViewItem.setSectionName(sectionName);
-            itemCount++;
-            setSectionToChild(recyclerViewItem, sectionName);
-        }
+//
+//        final int childUnderSection = 3;
+//
+//        for (Object item : super.recyclerViewItemList) {
+//            RecyclerViewItem recyclerViewItem = (RecyclerViewItem) item;
+//            headerIndex = ((itemCount / childUnderSection) + 1);
+//            sectionName = "Header " + headerIndex;
+//            recyclerViewItem.setSectionName(sectionName);
+//            itemCount++;
+//            setSectionToChild(recyclerViewItem, sectionName);
+//        }
 
         List<RecyclerViewItem> tempList = new ArrayList<>();
         headerMap = new LinkedHashMap<>();

@@ -8,8 +8,7 @@ import java.util.List;
 import androidx.recyclerview.widget.RecyclerView;
 
 
-public abstract class MultiLevelAdapter extends
-        RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public abstract class MultiLevelAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     protected List recyclerViewItemList;
 
