@@ -72,7 +72,7 @@ public class MyAdapterWithStickyHeader extends MultiLevelStickyHeaderAdapter {
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
         RecyclerViewItem rawItem = getItemAt(position);
 
-        // Implement
+        // Check if item is header item
         if (rawItem instanceof HeaderItem) {
             onBindHeaderViewHolder(holder, position);
             return;
