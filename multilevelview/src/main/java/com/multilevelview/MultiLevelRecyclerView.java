@@ -7,13 +7,13 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.multilevelview.animators.DefaultItemAnimator;
 import com.multilevelview.models.RecyclerViewItem;
 
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 
 public class MultiLevelRecyclerView extends RecyclerView implements OnRecyclerItemClickListener {
@@ -296,12 +296,10 @@ public class MultiLevelRecyclerView extends RecyclerView implements OnRecyclerIt
                 if (Constants.IS_LOG_ENABLED) {
                     Log.e(TAG, position + " Clicked On RecyclerView");
                 }
-                if (onItemClick != null) {
+                if (onItemClick != null && position != NO_POSITION) {
                     onItemClick.onItemClick(childView,
                             (RecyclerViewItem) mMultiLevelAdapter.getRecyclerViewItemList().get(position), position);
                 }
-
-
                 return isToggleItemOnClick;
             }
             return false;
