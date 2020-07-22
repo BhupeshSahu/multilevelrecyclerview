@@ -77,6 +77,8 @@ accordingly if you want to expand or collapse on click of that item.
 ```
 ## Adding Sticky Header
 
+![Sticky Header][image2]
+
 From `v2.1` onwards you can add Sticky Header on listview by extending your adapter with `MultiLevelStickyHeaderAdapter` instead of `MultiLevelAdapter`.
 ```java
 public class MyAdapterWithStickyHeader extends MultiLevelStickyHeaderAdapter {
@@ -111,3 +113,4 @@ limitations under the License.
 
 [//]: # (References)
 [image1]: ./images/multilevelrecyclerview-screenshot1.png?raw=true "MultiLevelRecyclerView"
+[image2]: ./images/sticky_header_demo.gif?raw=true "StickyHeader"
