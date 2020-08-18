@@ -1,6 +1,7 @@
 package com.mulitlevelrecyclerview.example;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.Switch;
 
 import com.mulitlevelrecyclerview.R;
 import com.multilevelview.MultiLevelRecyclerView;
+import com.multilevelview.OnRecyclerItemClickListener;
 import com.multilevelview.StickyHeaderItemDecorator;
 import com.multilevelview.models.RecyclerViewItem;
 
@@ -20,7 +22,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements OnRecyclerItemClickListener {
 
     private MultiLevelRecyclerView multiLevelRecyclerView;
     private StickyHeaderItemDecorator decorator;
@@ -53,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
 
         //If you are handling the click on your own then you can
         multiLevelRecyclerView.setToggleItemOnClick(true);
+
+        multiLevelRecyclerView.setOnItemClick(this);
 
         multiLevelRecyclerView.setAccordion(false);
 
@@ -146,5 +150,13 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onItemClick(View view, RecyclerViewItem item, int position) {
+        List list = multiLevelRecyclerView.getNodeHierarchy(item);
+        for (Object o : list) {
+            Log.d("TAG", "Level " + ((Item) o).getLevel() + ", Name " + ((Item) o).text);
+        }
     }
 }

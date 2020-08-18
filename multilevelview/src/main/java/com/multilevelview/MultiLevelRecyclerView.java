@@ -10,6 +10,7 @@ import android.view.View;
 import com.multilevelview.animators.DefaultItemAnimator;
 import com.multilevelview.models.RecyclerViewItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -205,12 +206,12 @@ public class MultiLevelRecyclerView extends RecyclerView implements OnRecyclerIt
 
     private void removePrevItems(List tempList, int position, int numberOfItemsAdded) {
         for (int i = 0; i < numberOfItemsAdded; i++) {
-            tempList.remove(position + 1);
+            if (tempList.size() > position + 1)
+                tempList.remove(position + 1);
         }
         isExpanded = false;
         mMultiLevelAdapter.updateItemList(tempList);
         mMultiLevelAdapter.notifyItemRangeRemoved(position + 1, numberOfItemsAdded);
-
         refreshPosition();
     }
 
@@ -315,6 +316,30 @@ public class MultiLevelRecyclerView extends RecyclerView implements OnRecyclerIt
 
         }
 
+    }
+
+    /**
+     * Convenient method to get hierarchy stack of input item
+     * @param item for which
+     * @return a flat list of item's hierarchy starting from item itself(inclusive)
+     */
+    public List getNodeHierarchy(RecyclerViewItem item) {
+        List nodeList = new ArrayList();
+        List tempList = mMultiLevelAdapter.getRecyclerViewItemList();
+        if (tempList.contains(item)) {
+            nodeList.add(item);
+            int lastLevel = item.getLevel();
+            for (int i = tempList.indexOf(item); i >= 0; i--) {
+                RecyclerViewItem iterItem = ((RecyclerViewItem) tempList.get(i));
+                if (iterItem.getLevel() < lastLevel) {
+                    nodeList.add(iterItem);
+                    lastLevel = iterItem.getLevel();
+                }
+                if (lastLevel < 1)
+                    break;
+            }
+        }
+        return nodeList;
     }
 
 }
